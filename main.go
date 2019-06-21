@@ -24,7 +24,7 @@ func main() {
 
 func detectMimeType(pathstring string) string {
 	if base := path.Ext(pathstring); base == "" {
-		return "plain/text"
+		return "plain/html"
 	} else {
 		switch base {
 		case ".js":
