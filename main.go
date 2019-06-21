@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path"
 )
 
 func main() {
@@ -12,10 +13,28 @@ func main() {
 	dir := workdir(flag.Args())
 	server := http.FileServer(http.Dir(dir))
 	http.HandleFunc("/", func(response http.ResponseWriter, request *http.Request) {
-		log.Printf("%s %s", request.Method, request.URL.String())
+		log.Printf("%s %s\n", request.Method, request.URL.String())
+		response.Header().Set("Accept", detectMimeType(request.URL.Path))
 		server.ServeHTTP(response, request)
 	})
 	http.ListenAndServe(":3000", nil)
+}
+
+func detectMimeType(pathstring string) string {
+	if base := path.Ext(pathstring); base == "" {
+		return "plain/text"
+	} else {
+		switch base {
+		case ".js":
+			return "text/javascript"
+		case ".mjs":
+			return "text/javascript"
+		case ".css":
+			return "text/css"
+		default:
+			return "plain/html"
+		}
+	}
 }
 
 func workdir(args []string) string {
