@@ -13,8 +13,9 @@ func main() {
 	dir := workdir(flag.Args())
 	server := http.FileServer(http.Dir(dir))
 	http.HandleFunc("/", func(response http.ResponseWriter, request *http.Request) {
-		log.Printf("%s %s\n", request.Method, request.URL.String())
-		response.Header().Set("Accept", detectMimeType(request.URL.Path))
+		mime := detectMimeType(request.URL.Path)
+		log.Printf("%s %s for %s\n", request.Method, request.URL.String(), mime)
+		response.Header().Set("Content-Type", mime)
 		server.ServeHTTP(response, request)
 	})
 	log.Print("Invoke server @ http://localhost:3000/")
