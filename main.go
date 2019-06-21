@@ -17,7 +17,8 @@ func main() {
 		response.Header().Set("Accept", detectMimeType(request.URL.Path))
 		server.ServeHTTP(response, request)
 	})
-	http.ListenAndServe(":3000", nil)
+	log.Print("Invoke server @ http://localhost:3000/")
+	log.Fatal(http.ListenAndServe(":3000", nil))
 }
 
 func detectMimeType(pathstring string) string {
