@@ -53,7 +53,6 @@ func withContentType(next http.HandlerFunc) http.HandlerFunc {
 			}
 		}
 
-		log.Printf("%s %s for %s\n", r.Method, r.URL.String(), contentType)
 		w.Header().Set("Content-Type", contentType)
 		next.ServeHTTP(w, r)
 	}
